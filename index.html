@@ -119,7 +119,7 @@ nav.menu{padding:4px 10px 20px;flex:1}
 .fld{margin-bottom:14px}
 .fld label{display:block;font-weight:600;font-size:13px;margin-bottom:5px}
 .fld .hint{font-size:12px;color:var(--mut);margin-top:4px}
-input[type=text],input[type=url],input[type=search],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:14px}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=search],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:14px}
 textarea{min-height:110px;resize:vertical;font-family:inherit}
 textarea.mono,pre.out{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--p)}
@@ -415,7 +415,7 @@ const LOGO="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAkAAADwCAYAAABi1T1DAA
 'use strict';
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const MAXP=3, LS='eflot-studio:';
+const MAXP=3, LS='seobysaran-studio:';
 const S={db:null,uid:null,mode:'local',sample:null,downloads:null,desktop:null,profile:null,projects:[],audits:[],prefs:{},curId:null,draft:{},run:null,viewAudit:null,ready:false,editProj:null};
 
 const INTENTS={
@@ -634,7 +634,7 @@ function delta(curv,prev,isPct,lowerBetter){
 }
 
 /* ---------------- Company login gate ---------------- */
-const BRANDS=['eflot','skillfloor','rubixe','datamites'];
+const BRANDS=[];
 const BRAND_LABELS=['SEO by Saran'];
 function allowedEmail(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(e||'').trim())}
 const GATE_SLIDES=[
@@ -673,15 +673,15 @@ function gateShell(inner){
   g.classList.remove('hidden');const l=$('#loading');if(l)l.style.display='none';gatePanelInit();
 }
 const BRAND_CHIPS='<div class="gbrands">'+BRAND_LABELS.map(b=>'<span>'+b+'</span>').join('')+'</div>';
-function gateChecking(){gateShell('<h2>Sign in to SEO Studio</h2><p class="sub">Use your company email</p>'+BRAND_CHIPS+'<div class="gcheck"><span class="spin dk"></span><span>Checking your account</span></div>')}
+function gateChecking(){gateShell('<h2>Signing you in</h2><p class="sub">One moment</p>'+'<div class="gcheck"><span class="spin dk"></span><span>Checking your account</span></div>')}
 function gateBlocked(title,msg,email){
   gateShell('<div class="gicon bad">✕</div><h2>'+esc(title)+'</h2><p class="sub">'+esc(msg)+'</p>'+(email?'<div class="gemail bad"><span>'+esc(email)+'</span></div>':'')+'<p class="gnote">Allowed email domains</p>'+BRAND_CHIPS+'<p class="gnote">Ask your team lead to share the app with your company Claude account.</p>');
 }
 function gateWelcome(me,email,owner){
   return new Promise(res=>{
-    gateShell('<h2>Sign in to SEO Studio</h2><p class="sub">Use your company email</p>'+BRAND_CHIPS+
+    gateShell('<h2>You are in</h2><p class="sub">Welcome to SEO by Saran Studio</p>'+
       '<div class="guser"><img alt=""><div><b></b><span></span></div></div>'+
-      '<div class="gok">✓ '+(email?'Company email verified':'Owner access')+'</div>'+
+      '<div class="gok">✓ '+(email?'Signed in':'Owner access')+'</div>'+
       '<button class="btn p gbtn" id="g_go">Continue to SEO Studio</button>');
     const u=$('#gate .guser');u.querySelector('img').src=me.avatarUrl||ICON;
     u.querySelector('b').textContent=me.name||'Team member';u.querySelector('span').textContent=email||(owner?'Signed in as owner':'Invited Claude account');
@@ -692,7 +692,7 @@ function gateEnter(){$('#gate').classList.add('hidden');$('#gate').innerHTML='';
 async function readDoc(ref){try{const s=await withTimeout(ref.get(),8000);return s.exists?s.data():null}catch(e){return undefined}}
 function gatePending(me,email,req,db,uid){
  return new Promise(res=>{
-  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Your access request was sent to the Eflot admin. You can use SEO Studio once it is approved.</p><div class="guser"><img alt=""><div><b></b><span></span></div></div><p class="gnote" id="g_when"></p><button class="btn p gbtn" id="g_chk">Check again</button>'+(S.actingAs?'<p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>':''));
+  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Your access request was sent to the admin. You can use SEO Studio once it is approved.</p><div class="guser"><img alt=""><div><b></b><span></span></div></div><p class="gnote" id="g_when"></p><button class="btn p gbtn" id="g_chk">Check again</button>'+(S.actingAs?'<p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>':''));
   if($('#g_sw'))$('#g_sw').onclick=e=>{e.preventDefault();switchUser()};
   const u=$('#gate .guser');u.querySelector('img').src=me.avatarUrl||ICON;u.querySelector('b').textContent=me.name||'Team member';u.querySelector('span').textContent=email||'Invited Claude account';
   $('#g_when').textContent='Requested on '+new Date(req.ts).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -703,17 +703,17 @@ function gatePending(me,email,req,db,uid){
 }
 function gateRejected(me,email,db,uid){
  return new Promise(res=>{
-  gateShell('<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">The Eflot admin has not approved access for this account.</p><div class="gemail bad"><span></span></div><button class="btn gbtn" id="g_again">Request access again</button>');
+  gateShell('<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">The admin has not approved access for this account.</p><div class="gemail bad"><span></span></div><button class="btn gbtn" id="g_again">Request access again</button>');
   $('#gate .gemail span').textContent=email||'Invited Claude account';
   $('#g_again').onclick=async()=>{const req={uid,email:email||'',company:brandOf(email),ts:Date.now(),again:true};try{await db.doc('requests/'+uid).set(req)}catch(e){toast('Could not send the request. Try again.');return}res(gatePending(me,email,req,db,uid))};
  });
 }
 function gateWelcome(me,email,owner,fresh){
   return new Promise(res=>{
-    gateShell('<h2>Sign in to SEO Studio</h2><p class="sub">Use your company email</p>'+BRAND_CHIPS+
+    gateShell('<h2>You are in</h2><p class="sub">Welcome to SEO by Saran Studio</p>'+
       '<div class="guser"><img alt=""><div><b></b><span></span></div></div>'+
-      '<div class="gok">✓ '+(fresh?'Access approved':owner&&S.actingAs?(S.isAdmin?'Shared Eflot account · Admin access':'Shared Eflot account · Team access'):email?'Company email verified':'Owner access')+'</div>'+
-      '<button class="btn p gbtn" id="g_go">Continue to SEO Studio</button>'+(owner&&S.actingAs?'<p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>':'')+'<p class="gnote">Your sign-ins and the tools you use are visible to the Eflot admin.</p>');
+      '<div class="gok">✓ '+(fresh?'Access approved':owner&&S.actingAs?(S.isAdmin?'Admin access':'Team access'):email?(fresh?'Access approved':'Signed in'):'Owner access')+'</div>'+
+      '<button class="btn p gbtn" id="g_go">Continue to SEO Studio</button>'+(owner&&S.actingAs?'<p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>':'')+'<p class="gnote">The admin can see who signs in and which tools they use.</p>');
     const u=$('#gate .guser');u.querySelector('img').src=me.avatarUrl||ICON;
     const aa=owner&&S.actingAs;
     u.querySelector('b').textContent=(aa&&S.actingAs.name)||me.name||'Team member';u.querySelector('span').textContent=(aa&&S.actingAs.email)||email||(owner?'Signed in as owner':'Invited Claude account');
@@ -726,8 +726,8 @@ async function gate(user,db){
   if(!user){
     // People who open the shared link: Claude does not say who they are, so check the email they type against the access list.
     if(!db){gateBlocked('Open this inside Claude','Sign in to Claude, then open the SEO Studio link again.');return false}
-    const me0={id:'',name:lsGet('eflot_myname')||'',avatarUrl:'',email:null};
-    let em=String(lsGet('eflot_myemail')||'').toLowerCase(),nm=me0.name;
+    const me0={id:'',name:lsGet('seobysaran_myname')||'',avatarUrl:'',email:null};
+    let em=String(lsGet('seobysaran_myemail')||'').toLowerCase(),nm=me0.name;
     if(!em||!allowedEmail(em)){const d=await gateAskEmail(me0,nm);em=d.email;nm=d.name}
     me0.name=nm;S.email='';S.declEmail=em;S.isAdmin=false;
     const ok=await gateListed(db,em);
@@ -741,17 +741,17 @@ async function gate(user,db){
   const email=me.email,owner=!!me.isOwner,uid=me.id;
   const isAdm=e=>!!(e&&ADMIN_EMAILS.includes(String(e).toLowerCase()));
   S.email=email||'';S.isAdmin=isAdm(email);
-  if(email&&!allowedEmail(email)&&!owner){gateBlocked('This email cannot sign in','SEO Studio is open only to Eflot, Skillfloor, Rubixe and DataMites team emails.',email);return false}
+  if(email&&!allowedEmail(email)&&!owner){gateBlocked('This email cannot sign in','Use a valid email address to sign in.',email);return false}
   if(!email&&!owner&&!uid){gateBlocked('Sign in to Claude first','Open the invite link while signed in to Claude with your company email.');return false}
   let seen=null;try{seen=localStorage.getItem('seobysaran_gate')}catch(e){}
   const fast=()=>{if(seen&&seen===(email||(owner?'owner':uid))){gateEnter();return true}return gateWelcome(me,email,owner)};
   if(owner){
     // Shared owner account: ask who is using it. Admin only if the company email is on the admin list.
-    let who=null;try{who=JSON.parse(localStorage.getItem('eflot_who')||'null')}catch(e){}
+    let who=null;try{who=JSON.parse(localStorage.getItem('seobysaran_who')||'null')}catch(e){}
     if(!who||!allowedEmail(who.email)){who=await gateWho(me);if(!who)return false}
     S.actingAs=who;S.declEmail=who.email;S.isAdmin=isAdm(who.email);
     if(S.isAdmin)return fast();
-    // Everyone else on the shared account needs Vamsi's or Saran's approval, tracked per email.
+    // Everyone else needs the admin's approval, tracked per email.
     if(!db){gateBlocked('We could not check your access','Reload the page and try again.');return false}
     const key='em_'+who.email.replace(/[^a-z0-9]/g,'_');
     const sa=await readDoc(db.doc('approvals/'+key));
@@ -776,7 +776,7 @@ async function gate(user,db){
   // People approved one by one before the access list existed.
   if(a&&a.status==='approved'&&req&&req.email)return fast();
   // Access list: admins add company emails in Admin → Team access.
-  let em=String(email||(req&&req.email)||lsGet('eflot_myemail')||'').toLowerCase(),nm=me.name||(req&&req.name)||lsGet('eflot_myname')||'';
+  let em=String(email||(req&&req.email)||lsGet('seobysaran_myemail')||'').toLowerCase(),nm=me.name||(req&&req.name)||lsGet('seobysaran_myname')||'';
   if(!em||!allowedEmail(em)){const d=await gateAskEmail(me,nm);em=d.email;nm=d.name}
   const ok=await gateListed(db,em);
   if(ok===undefined){gateBlocked('We could not check your access','Reload the page and try again.');return false}
@@ -792,7 +792,7 @@ async function gateIn(me,em,nm,db,uid,fast){
   return fast();
 }
 /* Link visitors: create an account with name and company email, send the request to the admins by email. */
-function reqMsg(nm,em){return 'Hi Vamsi / Saran,\n\nPlease approve my access to SEO by Saran Studio.\n\nName: '+nm+'\nEmail: '+em+'\n\nTo approve: SEO Studio → Admin dashboard → Team access → add this email.\n\nThanks'}
+function reqMsg(nm,em){return 'Hi Saran,\n\nPlease approve my access to SEO by Saran Studio.\n\nName: '+nm+'\nEmail: '+em+'\n\nTo approve: SEO Studio → Admin dashboard → Team access → add this email.\n\nThanks'}
 function reqMail(nm,em){return 'mailto:'+ADMIN_EMAILS.join(',')+'?subject='+encodeURIComponent('SEO Studio access request: '+nm)+'&body='+encodeURIComponent(reqMsg(nm,em))}
 function gateAskEmail(me,name){
  return new Promise(res=>{
@@ -800,28 +800,28 @@ function gateAskEmail(me,name){
    '<div class="fld" style="text-align:left"><label>Your name</label><input type="text" id="g_nm" placeholder="e.g. Priya Sharma"></div>'+
    '<div class="fld" style="text-align:left"><label>Company email</label><input type="email" id="g_em" placeholder="name@yourcompany.com"><div class="hint" id="g_err" style="color:var(--bad)"></div></div>'+
    '<button class="btn p gbtn" id="g_send">Send access request to admin</button><p class="gnote">Already approved? Enter the same details and you go straight in.</p>');
-  $('#g_nm').value=name||'';$('#g_em').value=lsGet('eflot_myemail')||'';
+  $('#g_nm').value=name||'';$('#g_em').value=lsGet('seobysaran_myemail')||'';
   $('#g_send').onclick=()=>{
    const nm=$('#g_nm').value.trim(),em=$('#g_em').value.trim().toLowerCase();
    if(!nm){$('#g_err').textContent='Add your name.';return}
-   if(!allowedEmail(em)){$('#g_err').textContent='Use your Eflot, Skillfloor, Rubixe or DataMites email.';return}
-   try{localStorage.setItem('eflot_myemail',em);localStorage.setItem('eflot_myname',nm)}catch(e){}
+   if(!allowedEmail(em)){$('#g_err').textContent='Enter a valid email address.';return}
+   try{localStorage.setItem('seobysaran_myemail',em);localStorage.setItem('seobysaran_myname',nm)}catch(e){}
    res({name:nm,email:em,fresh:true});
   };
  });
 }
 function gateNotListed(me,em,nm,db,uid,typed){
  return new Promise(res=>{
-  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Send your request to Vamsi or Saran. This page opens by itself once they approve you. After that you can use SEO Studio any time.</p><div class="guser"><img alt=""><div><b></b><span></span></div></div>'+
+  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Send your request to the admin. This page opens by itself once they approve you. After that you can use SEO Studio any time.</p><div class="guser"><img alt=""><div><b></b><span></span></div></div>'+
    '<a class="btn p gbtn" id="g_mail" target="_blank" rel="noopener">✉ Email request to admin</a>'+
    '<div class="row" style="justify-content:center;gap:8px;margin-top:8px"><button class="btn o sm" id="g_cp">Copy request for WhatsApp</button><button class="btn o sm" id="g_chk">Check again</button></div>'+
    '<p class="gnote" id="g_when"></p>'+(typed?'<p class="gnote"><a href="#" id="g_sw">Wrong details? Start again</a></p>':''));
   const u=$('#gate .guser');u.querySelector('img').src=ICON;u.querySelector('b').textContent=nm||'Team member';u.querySelector('span').textContent=em;
   $('#g_mail').href=reqMail(nm,em);
-  $('#g_mail').onclick=()=>{try{localStorage.setItem('eflot_reqsent',em)}catch(e){};setTimeout(()=>{$('#g_when').textContent='Request opened in your email app. Press Send there.'},300)};
-  if(lsGet('eflot_reqsent')===em)$('#g_when').textContent='Request sent. Waiting for your admin.';
-  $('#g_cp').onclick=async()=>{const t=reqMsg(nm,em);try{await navigator.clipboard.writeText(t);toast('Copied. Paste it in WhatsApp to Vamsi or Saran.')}catch(e){toast(t)}};
-  if($('#g_sw'))$('#g_sw').onclick=e=>{e.preventDefault();try{['eflot_myemail','eflot_reqsent'].forEach(k=>localStorage.removeItem(k))}catch(x){}location.reload()};
+  $('#g_mail').onclick=()=>{try{localStorage.setItem('seobysaran_reqsent',em)}catch(e){};setTimeout(()=>{$('#g_when').textContent='Request opened in your email app. Press Send there.'},300)};
+  if(lsGet('seobysaran_reqsent')===em)$('#g_when').textContent='Request sent. Waiting for your admin.';
+  $('#g_cp').onclick=async()=>{const t=reqMsg(nm,em);try{await navigator.clipboard.writeText(t);toast('Copied. Paste it in WhatsApp to the admin.')}catch(e){toast(t)}};
+  if($('#g_sw'))$('#g_sw').onclick=e=>{e.preventDefault();try{['seobysaran_myemail','seobysaran_reqsent'].forEach(k=>localStorage.removeItem(k))}catch(x){}location.reload()};
   let done=false;const check=async()=>{if(done)return true;const ok=await gateListed(db,em);if(ok){done=true;clearInterval(iv);res(gateIn(me,em,nm,db,uid,()=>gateWelcome(me,em,false,true)))}return done};
   const iv=setInterval(check,15000);
   $('#g_chk').onclick=async()=>{const b=$('#g_chk');b.disabled=true;b.innerHTML='<span class="spin"></span> Checking';const d=await check();if(!d){b.disabled=false;b.textContent='Check again';toast('Not approved yet')}};
@@ -830,31 +830,31 @@ function gateNotListed(me,em,nm,db,uid,typed){
 /* The owner account is shared: ask the person for their own name and company email. Saved in this browser until "Switch user". */
 function gateWho(me){
  return new Promise(res=>{
-  gateShell('<h2>Who is using this account?</h2><p class="sub">This is the shared Eflot account. Enter your own name and company email. Admin access opens only for admin emails.</p>'+BRAND_CHIPS+
+  gateShell('<h2>Who is using this account?</h2><p class="sub">Enter your own name and email. Admin access opens only for admin emails.</p>'+BRAND_CHIPS+
    '<div class="fld" style="text-align:left"><label>Your name</label><input type="text" id="w_nm" placeholder="e.g. Priya Sharma"></div>'+
    '<div class="fld" style="text-align:left"><label>Your company email</label><input type="email" id="w_em" placeholder="name@yourcompany.com"><div class="hint" id="w_err" style="color:var(--bad)"></div></div>'+
    '<button class="btn p gbtn" id="w_go">Continue</button>');
   $('#w_go').onclick=()=>{
    const nm=$('#w_nm').value.trim(),em=$('#w_em').value.trim().toLowerCase();
    if(!nm){$('#w_err').textContent='Add your name.';return}
-   if(!allowedEmail(em)){$('#w_err').textContent='Use your Eflot, Skillfloor, Rubixe or DataMites email.';return}
-   const who={name:nm,email:em};try{localStorage.setItem('eflot_who',JSON.stringify(who));localStorage.removeItem('seobysaran_gate')}catch(e){}
+   if(!allowedEmail(em)){$('#w_err').textContent='Enter a valid email address.';return}
+   const who={name:nm,email:em};try{localStorage.setItem('seobysaran_who',JSON.stringify(who));localStorage.removeItem('seobysaran_gate')}catch(e){}
    res(who);
   };
  });
 }
 function gateRejectedShared(me,who,db,key){
  return new Promise(res=>{
-  gateShell('<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">An admin has not approved this email on the shared Eflot account.</p><div class="gemail bad"><span></span></div><button class="btn gbtn" id="g_again">Request access again</button><p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>');
+  gateShell('<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">An admin has not approved this email.</p><div class="gemail bad"><span></span></div><button class="btn gbtn" id="g_again">Request access again</button><p class="gnote"><a href="#" id="g_sw">Not you? Switch user</a></p>');
   $('#gate .gemail span').textContent=who.email;$('#g_sw').onclick=e=>{e.preventDefault();switchUser()};
   $('#g_again').onclick=async()=>{const r={uid:key,name:who.name,email:who.email,company:brandOf(who.email),ts:Date.now(),shared:true,again:true};try{await db.doc('requests/'+key).set(r)}catch(e){toast('Could not send the request. Try again.');return}res(gatePending(me,who.email,r,db,key))};
  });
 }
-function switchUser(){try{localStorage.removeItem('eflot_who');localStorage.removeItem('seobysaran_gate')}catch(e){}location.reload()}
+function switchUser(){try{localStorage.removeItem('seobysaran_who');localStorage.removeItem('seobysaran_gate')}catch(e){}location.reload()}
 /* Ask invited people (whose email Claude does not share) for their name and work email. Resolves the saved request, or null if it could not be saved. */
 function gateDetails(me,db,uid,old,approved){
  return new Promise(res=>{
-  gateShell('<h2>'+(approved?'Tell us who you are':'Request access')+'</h2><p class="sub">'+(approved?'Add your name and work email so your admin knows who is using SEO Studio.':'Add your name and work email. The Eflot admin uses these to approve you.')+'</p>'+BRAND_CHIPS+
+  gateShell('<h2>'+(approved?'Tell us who you are':'Request access')+'</h2><p class="sub">'+(approved?'Add your name and work email so your admin knows who is using SEO Studio.':'Add your name and work email. The admin uses these to approve you.')+'</p>'+BRAND_CHIPS+
    '<div class="fld" style="text-align:left"><label>Your name</label><input type="text" id="g_nm" placeholder="e.g. Priya Sharma"></div>'+
    '<div class="fld" style="text-align:left"><label>Work email</label><input type="email" id="g_em" placeholder="name@yourcompany.com"><div class="hint" id="g_err" style="color:var(--bad)"></div></div>'+
    '<button class="btn p gbtn" id="g_send">'+(approved?'Save and continue':'Send request')+'</button>');
@@ -862,7 +862,7 @@ function gateDetails(me,db,uid,old,approved){
   $('#g_send').onclick=async()=>{
    const nm=$('#g_nm').value.trim(),em=$('#g_em').value.trim().toLowerCase();
    if(!nm){$('#g_err').textContent='Add your name.';return}
-   if(!allowedEmail(em)){$('#g_err').textContent='Use your Eflot, Skillfloor, Rubixe or DataMites email.';return}
+   if(!allowedEmail(em)){$('#g_err').textContent='Enter a valid email address.';return}
    const b=$('#g_send');b.disabled=true;b.innerHTML='<span class="spin"></span> Saving';
    const r={uid,name:nm,email:em,company:brandOf(em),ts:(approved&&old&&old.ts)||Date.now(),typed:true};
    try{await db.doc('requests/'+uid).set(r);res(r)}catch(e){res(null)}
@@ -907,7 +907,7 @@ async function actFlush(){
 window.addEventListener('pagehide',()=>{if(ACT.dirty)actFlush()});
 
 function devInfo(){
- let id=null;try{id=localStorage.getItem('eflot_dev');if(!id){id='d'+Math.random().toString(36).slice(2,10);localStorage.setItem('eflot_dev',id)}}catch(e){id='d-unknown'}
+ let id=null;try{id=localStorage.getItem('seobysaran_dev');if(!id){id='d'+Math.random().toString(36).slice(2,10);localStorage.setItem('seobysaran_dev',id)}}catch(e){id='d-unknown'}
  const ua=navigator.userAgent||'';
  const os=/Windows/.test(ua)?'Windows':/iPhone|iPad/.test(ua)?'iPhone/iPad':/Android/.test(ua)?'Android':/Mac OS X|Macintosh/.test(ua)?'Mac':/Linux/.test(ua)?'Linux':'Other';
  const br=/Edg\//.test(ua)?'Edge':/Claude/.test(ua)?'Claude app':/OPR\//.test(ua)?'Opera':/Chrome\//.test(ua)?'Chrome':/Firefox\//.test(ua)?'Firefox':/Safari\//.test(ua)?'Safari':'Browser';
@@ -930,12 +930,12 @@ const TA={list:null};
 async function taLoad(){try{const r=await S.db.collection('approvals').get();TA.list=r.docs.filter(d=>d.id.startsWith('em_')).map(d=>Object.assign({key:d.id},d.data())).filter(x=>x&&x.status==='approved').sort((a,b)=>(b.ts||0)-(a.ts||0))}catch(e){TA.list=[]}}
 async function taDraw(){
  const c=$('#ta_card');if(!c)return;if(!TA.list)await taLoad();
- c.innerHTML=`<h2>Team access</h2><p class="sub">When someone sends an access request, type their name and email here and click Approve access. Their screen opens by itself. Remove an email to stop their access.</p>
- <div class="row" style="gap:8px;margin:12px 0;flex-wrap:wrap"><input type="text" id="ta_nm" placeholder="Name" style="max-width:220px"><input type="email" id="ta_em" placeholder="name@eflot.com" style="max-width:280px"><button class="btn p" id="ta_add">Approve access</button></div>
- <p class="sub" style="margin-bottom:8px">Allowed: Eflot, Skillfloor, Rubixe and DataMites emails. ${TA.list.length} ${TA.list.length===1?'person has':'people have'} access.</p>
- ${TA.list.length?`<table class="t"><thead><tr><th>Name</th><th>Email</th><th>Added</th><th></th></tr></thead><tbody>${TA.list.map(x=>`<tr><td>${esc(x.name||'')}</td><td>${esc(x.email||'')}</td><td>${x.ts?esc(fdt(x.ts)):''}</td><td style="text-align:right"><button class="btn o sm" data-tarm="${esc(x.key)}">Remove</button></td></tr>`).join('')}</tbody></table>`:'<p class="sub">No emails added yet.</p>'}`;
+ c.innerHTML=`<h2>Team access</h2><p class="sub">Anyone can sign in with Google or email, then waits for your approval. New requests appear under Access requests on this page. To let someone in before they sign in, add their name and email here. Remove an email to stop their access.</p>
+ <div class="row" style="gap:8px;margin:12px 0;flex-wrap:wrap"><input type="text" id="ta_nm" placeholder="Name" style="max-width:220px"><input type="email" id="ta_em" placeholder="name@company.com" style="max-width:280px"><button class="btn p" id="ta_add">Approve access</button></div>
+ <p class="sub" style="margin-bottom:8px">Any email can request access. ${TA.list.length} ${TA.list.length===1?'person has':'people have'} access.</p>
+ ${TA.list.length?`<table class="t"><thead><tr><th>Name</th><th>Email</th><th>Added</th><th></th></tr></thead><tbody>${TA.list.map(x=>`<tr><td>${esc(x.name||'')}</td><td>${esc(x.email||'')}</td><td>${x.ts?esc(fdt(x.ts)):''}</td><td style="text-align:right"><button class="btn o sm" data-tarm="${esc(x.key)}">Remove</button></td></tr>`).join('')}</tbody></table>`:'<p class="sub">No emails pre-approved yet.</p>'}`;
  $('#ta_add').onclick=async()=>{const nm=$('#ta_nm').value.trim(),em=$('#ta_em').value.trim().toLowerCase();
-  if(!allowedEmail(em)){toast('Use an Eflot, Skillfloor, Rubixe or DataMites email');return}
+  if(!allowedEmail(em)){toast('Enter a valid email address');return}
   const d={status:'approved',email:em,name:nm,ts:Date.now(),by:S.declEmail||S.uid,list:true};
   try{await S.db.doc('approvals/'+emKey(em)).set(d)}catch(e){toast('Could not save. Admins need Edit access to this app.');return}
   TA.list=TA.list.filter(x=>x.email!==em);TA.list.unshift(Object.assign({key:emKey(em)},d));toast('Access added for '+em);taDraw()};
@@ -969,7 +969,7 @@ function admEmail(uid){const r=admReq(uid);const p=ADM.people[uid];return (r&&r.
 function admReqHTML(){
  const pend=ADM.reqs.filter(r=>reqState(r)==='pending').sort((a,b)=>b.ts-a.ts);
  const done=ADM.reqs.filter(r=>reqState(r)!=='pending').sort((a,b)=>(ADM.apps[b.uid].ts)-(ADM.apps[a.uid].ts));
- const card=(r,st)=>`<div class="ad-req"><div class="who"><b data-rn="${esc(r.uid)}"></b><span>${esc(r.email||'No email given yet')}${r.shared?' (on the shared Eflot account)':r.typed?' (typed by user)':''}${r.company?' · '+esc(r.company):''} · ${st==='pending'?'requested '+ago(r.ts)+(r.again?' (asked again)':''):(st==='approved'?'approved ':'rejected ')+ago(ADM.apps[r.uid].ts)}</span></div>${st==='pending'?`<button class="btn ok sm" data-ap="${esc(r.uid)}">Approve</button><button class="btn no sm" data-rj="${esc(r.uid)}">Reject</button>`:st==='approved'?`<span class="chip c-nc">Approved</span><button class="btn no sm" data-rj="${esc(r.uid)}">Remove access</button>`:`<span class="chip c-x">Rejected</span><button class="btn ok sm" data-ap="${esc(r.uid)}">Approve</button>`}</div>`;
+ const card=(r,st)=>`<div class="ad-req"><div class="who"><b data-rn="${esc(r.uid)}"></b><span>${esc(r.email||'No email given yet')}${r.shared?' (shared account)':r.typed?' (typed by user)':''}${r.company?' · '+esc(r.company):''} · ${st==='pending'?'requested '+ago(r.ts)+(r.again?' (asked again)':''):(st==='approved'?'approved ':'rejected ')+ago(ADM.apps[r.uid].ts)}</span></div>${st==='pending'?`<button class="btn ok sm" data-ap="${esc(r.uid)}">Approve</button><button class="btn no sm" data-rj="${esc(r.uid)}">Reject</button>`:st==='approved'?`<span class="chip c-nc">Approved</span><button class="btn no sm" data-rj="${esc(r.uid)}">Remove access</button>`:`<span class="chip c-x">Rejected</span><button class="btn ok sm" data-ap="${esc(r.uid)}">Approve</button>`}</div>`;
  return `<div class="card"><h3>Access requests ${pend.length?'<span class="tg ai">'+pend.length+' waiting</span>':''}</h3><p class="sub">New team members wait here until you approve them.</p>${pend.length?pend.map(r=>card(r,'pending')).join(''):'<p class="sub">No requests waiting.</p>'}
  ${done.length?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700;font-size:13.5px">Approved and rejected users (${done.length})</summary><div style="margin-top:10px">${done.map(r=>card(r,reqState(r))).join('')}</div></details>`:''}</div>`;
 }
@@ -1063,14 +1063,7 @@ function route(){
 
 /* ---------------- onboarding ---------------- */
 let OB={step:1,p:{},pr:{}};
-const PRESETS=[
- {website:'https://eflot.com',name:'Eflot',city:'Bangalore, India',industry:'digital marketing agency',services:['SEO','Local SEO','social media marketing','PPC advertising','email marketing'],customers:'SMEs, enterprises, real estate brands, educational institutions, IT firms'},
- {website:'https://www.rubixe.com',name:'Rubixe',city:'Bangalore, India',industry:'AI consulting company',services:['AI consulting and strategy','AI automation','agentic AI solutions','AI cybersecurity','AI readiness audit'],customers:'enterprises in financial services, retail, manufacturing, telecom and education'},
- {website:'https://www.digitdefence.com',name:'DigitDefence',city:'Bangalore, India',industry:'cybersecurity services company',services:['penetration testing','risk assessment','cloud security','network security','endpoint security'],customers:'small businesses, enterprises, government organizations'},
- {website:'https://www.proplilly.com',name:'PropLilly',city:'Bangalore, India',industry:'property monitoring and real estate services company',services:['NRI land monitoring','vacant land monitoring','encroachment monitoring','inherited land monitoring','property sale and purchase'],customers:'NRIs, absentee property owners, families with inherited land'},
- {website:'https://skillfloor.com',name:'Skillfloor',city:'Bangalore, India',industry:'professional training institute',services:['data science courses','artificial intelligence courses','data analytics courses','cloud computing courses','ethical hacking courses'],customers:'students, graduates, working professionals'},
- {website:'https://iabac.org',name:'IABAC',city:'Global',industry:'data science certification body',services:['data science certification','data analytics certification','business analytics certification','AI certification','training partner accreditation'],customers:'data science professionals, students, training institutes, enterprises'}
-];
+const PRESETS=[];
 function showOnboard(step){
  $('#app').classList.add('hidden');const ob=$('#onboard');ob.classList.remove('hidden');
  OB.step=step;if(step===1)OB.p=Object.assign({role:'SEO executive',level:'Beginner'},S.profile||{});
@@ -1089,10 +1082,10 @@ function drawOb(){
  }else if(st===2){
   const p=OB.pr;
   const have=S.projects.map(x=>x.domain);
-  const quick=S.editProj?'':`<div class="fld"><label>Quick fill: pick a group brand</label><div class="qfill">${PRESETS.map((x,i)=>{const added=have.includes(domainOf(x.website));return `<button type="button" class="qf${p.website===x.website?' on':''}" data-pre="${i}"${added?' disabled title="Already a project"':''}>${esc(x.name)}${added?' ✓':''}</button>`}).join('')}</div><div class="hint">Fills the details below. You can edit anything before you continue.</div></div>`;
+  const quick='';
   body=`<h2>${S.editProj?'Edit project':'Add your website'}</h2><p class="sub">The app uses these details to write the questions buyers ask AI tools.</p>${quick}
-  <div class="fld"><label>Website</label><input type="url" id="ob_web" value="${esc(p.website||'')}" placeholder="https://eflot.com"></div>
-  <div class="grid g2"><div class="fld"><label>Brand name</label><input type="text" id="ob_bname" value="${esc(p.name||'')}" placeholder="Eflot"></div>
+  <div class="fld"><label>Website</label><input type="url" id="ob_web" value="${esc(p.website||'')}" placeholder="https://seobysaran.com"></div>
+  <div class="grid g2"><div class="fld"><label>Brand name</label><input type="text" id="ob_bname" value="${esc(p.name||'')}" placeholder="SEO by Saran"></div>
   <div class="fld"><label>Main market</label><input type="text" id="ob_city" value="${esc(p.city||'')}" placeholder="Bangalore, India"><div class="hint">City or country you sell in.</div></div></div>
   <div class="fld"><label>Industry</label><input type="text" id="ob_ind" value="${esc(p.industry||'')}" placeholder="digital marketing agency"></div>
   <div class="fld"><label>Main services (up to 5)</label><input type="text" id="ob_srv" value="${esc((p.services||[]).join(', '))}" placeholder="SEO, PPC, social media marketing, web design, content marketing"><div class="hint">Separate with commas.</div></div>
@@ -1101,7 +1094,7 @@ function drawOb(){
   const p=OB.pr;
   body=`<h2>Who do you compete with?</h2><p class="sub">Add up to 5 competitors. The checker also finds the brands AI names that you have not listed.</p>
   <div class="fld"><label>Competitors</label><textarea id="ob_comp" placeholder="One per line or separated by commas">${esc((p.competitors||[]).join('\n'))}</textarea></div>
-  <div class="fld"><label>Other names AI may use for your brand (optional)</label><input type="text" id="ob_alias" value="${esc((p.aliases||[]).join(', '))}" placeholder="Eflot Digital, eflot.com"></div>`;
+  <div class="fld"><label>Other names AI may use for your brand (optional)</label><input type="text" id="ob_alias" value="${esc((p.aliases||[]).join(', '))}" placeholder="SEO by Saran, seobysaran.com"></div>`;
  }else{
   const p=OB.pr;
   body=`<h2>${S.editProj?'Project updated':'Your project is ready'}</h2><p class="sub">Please check these details. You can change them any time in Profile and projects.</p>
@@ -1285,7 +1278,7 @@ function renderAudit(el,a,prev){
  const src=sourceStats(a.rows).slice(0,10);
  el.innerHTML=`
  <div class="row" style="margin:4px 0 14px"><div><h2 style="font-size:19px">${a.source==='quick'?'Quick AI check':'Full audit'} · ${esc(fmtDate(a.date))}</h2><div class="sub" style="margin:0">${queries.length} questions · ${plats.length} platform${plats.length>1?'s':''}: ${esc(plats.join(', '))}${prev?' · compared with '+esc(fmtDate(prev.date)):''}</div></div><span class="sp"></span>
- <button class="btn o sm" data-dl="html">⬇ Eflot report</button><button class="btn o sm" data-dl="csv">⬇ CSV</button><button class="btn o sm" data-dl="json">⬇ JSON</button></div>
+ <button class="btn o sm" data-dl="html">⬇ HTML report</button><button class="btn o sm" data-dl="csv">⬇ CSV</button><button class="btn o sm" data-dl="json">⬇ JSON</button></div>
  <div class="grid dashtop"><div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0">${gauge(M.score)}<div style="text-align:center">${delta(M.score,P&&P.score)}</div></div>
  <div class="tiles">
   <div class="tile"><div class="k">Visibility</div><div class="v">${pct(M.presence)}</div>${delta(M.presence,P&&P.presence,true)}</div>
@@ -1373,7 +1366,7 @@ function reportHTML(a,prev){
  <div class="pg">${hdr}<h2>Top brands named per question</h2>${queries.map(q=>`<h3>${esc(q)}</h3>${a.rows.filter(r=>r.query===q&&r.status==='ok').map(r=>`<div><b>${esc(r.platform)}:</b> ${r._names.slice(0,10).map(n=>n.own?`<span class="me">${esc(n.name)}</span>`:esc(n.name)).join(', ')||'No brands named'}</div>`).join('')}`).join('')}</div>
  <div class="pg">${hdr}<h2>Gaps and actions</h2>${Object.keys(gaps).length?Object.keys(gaps).map(k=>`<div class="gap"><b>${esc((INTENTS[k]||{l:k}).l)}</b> · ${gaps[k].length} missed<br><span class="note">Example: ${esc(gaps[k][0].query)}</span><div style="margin-top:6px">${esc(ACTION[k]||ACTION.custom)}</div></div>`).join(''):'<p>No gaps found in this audit.</p>'}
  <h3>How this report works</h3><p class="note">Each question was asked fresh on each platform. Every brand named was recorded in order, along with every source linked. "Visibility" counts answers that named or linked ${esc(p.company)}. ${a.source==='quick'?'This Quick AI check used Claude without web search, so links are rare.':''}</p></div>
- <div class="close"><img src="${LOGO}" alt="SEO by Saran"><q>SEO is no longer just Search Engine Optimization. It's Search Everywhere Optimization.</q><div class="note">SEO by Saran</div><p style="margin-top:40px">Prepared by Eflot · eflot.com</p><p class="note">Open this file in a browser and press Ctrl+P (Cmd+P on Mac) to save it as a PDF.</p></div>
+ <div class="close"><img src="${LOGO}" alt="SEO by Saran"><q>SEO is no longer just Search Engine Optimization. It's Search Everywhere Optimization.</q><div class="note">SEO by Saran</div><p style="margin-top:40px">Prepared by SEO by Saran · seobysaran.com</p><p class="note">Open this file in a browser and press Ctrl+P (Cmd+P on Mac) to save it as a PDF.</p></div>
  </body></html>`;
 }
 
@@ -1596,7 +1589,7 @@ function vNap(m){
  const p=cur();
  m.innerHTML=`<div class="card"><h2>NAP consistency checker</h2><p class="sub">Compare your Name, Address and Phone across listings. Paste what each directory shows.</p>
  <div class="grid g3"><div class="fld"><label>Correct name</label><input type="text" id="np_n" value="${esc(p.name)}"></div><div class="fld"><label>Correct address</label><input type="text" id="np_a"></div><div class="fld"><label>Correct phone</label><input type="text" id="np_p"></div></div>
- <div class="fld"><label>Listings: Source | Name | Address | Phone, one per line</label><textarea id="np_l" class="mono" placeholder="Justdial | Your Business | 12 MG Road, Bangalore | +91 98450 00000&#10;Google | Eflot | 12, M.G. Road, Bengaluru | 098450 00000"></textarea></div><button class="btn p" id="np_go">Check listings</button></div><div id="np_out"></div>`;
+ <div class="fld"><label>Listings: Source | Name | Address | Phone, one per line</label><textarea id="np_l" class="mono" placeholder="Justdial | Your Business | 12 MG Road, Bangalore | +91 98450 00000&#10;Google | SEO by Saran | 12, M.G. Road, Bengaluru | 098450 00000"></textarea></div><button class="btn p" id="np_go">Check listings</button></div><div id="np_out"></div>`;
  $('#np_go').onclick=()=>{const N=norm(val('np_n')),A=norm(val('np_a').replace(/bengaluru/gi,'bangalore')),P=val('np_p').replace(/\D/g,'').slice(-10);
   const tok=s=>new Set(s.split(' ').filter(Boolean));const sim=(a,b)=>{const x=tok(a),y=tok(b);if(!x.size||!y.size)return 0;let i=0;x.forEach(t=>{if(y.has(t))i++});return i/new Set([...x,...y]).size};
   const rows=$('#np_l').value.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(x=>x.length>=2);
@@ -1628,17 +1621,17 @@ function vReports(m){
  <div class="row"><button class="btn p" data-k="html">⬇ Report (HTML)</button><button class="btn o" data-k="csv">⬇ CSV</button><button class="btn o" data-k="json">⬇ JSON</button></div>`:'<p class="sub">No audits yet for this project.</p>'}</div>
  <div class="card"><h2>Back up everything</h2><p class="sub">Your profile, all projects and all audits in one JSON file.</p><button class="btn o" id="rp_all">⬇ Download backup</button></div>`;
  $$('[data-k]',m).forEach(b=>b.onclick=()=>{const i=+val('rp_a');downloadAudit(list[i],b.dataset.k,list[i+1])});
- $('#rp_all').onclick=()=>save('eflot-seo-studio-backup_'+today()+'.json',JSON.stringify({profile:S.profile,projects:S.projects,audits:S.audits.map(a=>Object.assign({},a,{rows:a.rows.map(r=>{const o={};Object.keys(r).forEach(k=>{if(k[0]!=='_')o[k]=r[k]});return o})}))},null,2));
+ $('#rp_all').onclick=()=>save('seobysaran-studio-backup_'+today()+'.json',JSON.stringify({profile:S.profile,projects:S.projects,audits:S.audits.map(a=>Object.assign({},a,{rows:a.rows.map(r=>{const o={};Object.keys(r).forEach(k=>{if(k[0]!=='_')o[k]=r[k]});return o})}))},null,2));
 }
 
 /* ---------------- blog ---------------- */
 function vBlog(m){
- m.innerHTML=`<div class="card"><h2>Eflot SEO blog</h2><p class="sub">Guides and references from the Eflot SEO team.</p>
+ m.innerHTML=`<div class="card"><h2>SEO blog</h2><p class="sub">Guides and references from SEO by Saran.</p>
  <a href="#glossary" class="post" style="text-decoration:none;color:inherit;padding:12px;border:1px solid var(--line);border-radius:12px"><div class="th">${GL_TOTAL}</div><div><span class="pill">Glossary · Updated Nov 2026</span><h3 style="margin:6px 0 4px">SEO glossary: ${GL_TOTAL} SEO and AI search terms, one line each</h3><p class="sub" style="margin:0">Test yourself: read each term, reveal the meaning if unsure, tick what you know.</p></div></a>
  <p class="sub" style="margin-top:16px">More posts are on the way.</p></div>`;
 }
 function vGlossary(m){
- const KEY='eflot-seo-glossary-v1';let known={};try{known=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+ const KEY='seobysaran-glossary-v1';let known={};try{known=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
  m.innerHTML=`<div class="hero"><span class="pill" style="background:rgba(255,255,255,.16);color:#fff">SEO Glossary · Updated Nov 2026</span><h2 style="margin-top:10px">${GL_TOTAL} SEO and AI search terms, one line each</h2><p>The meanings are hidden, so test yourself first. 1: read the term. 2: unsure? Tap Show meaning. 3: know it? Tick the box.</p>
  <div style="max-width:480px"><div class="row" style="font-weight:700"><span>Your progress</span><span class="sp"></span><span id="gl_pt"></span></div><div class="prog" style="background:rgba(255,255,255,.2)"><i id="gl_pb" style="background:#fff"></i></div></div></div>
  <div class="gl-tools"><div class="row"><input type="search" id="gl_q" placeholder="Search a term, e.g. canonical, schema, AI Overviews" style="flex:1;min-width:200px"><label class="tog"><input type="checkbox" id="gl_all"> Show all meanings</label><label class="tog"><input type="checkbox" id="gl_hide"> Hide terms I know</label><button class="btn q" id="gl_reset">Clear ticks</button></div>
@@ -1763,20 +1756,12 @@ function vCwv(m){
 }
 
 
-/* ---------------- Site audit crawler: lives in its own desktop app ---------------- */
-const CRAWLER_URL='https://claude.ai/artifact/2T1AhmNEnERzTrJ9eQ1jJc';
+/* ---------------- Site audit crawler page ---------------- */
 function vSiteAudit(m){const p=cur();
  if(CR.st&&CR.st.done){crDraw();return}
  m.innerHTML=`<div class="card"><h2>Site audit crawler</h2><p class="sub">Crawls a whole site like Screaming Frog and scores it 0 to 100: response codes, redirects, titles, meta descriptions, H1 and H2, canonicals, noindex, hreflang, sitemaps, images, duplicate and thin pages, plus a CSV export for every tab.</p>
- <div class="crbox"><b>It runs as its own desktop app, Eflot Site Crawler.</b> A crawler needs to request pages from your computer, and Claude only allows that in a separate app kept inside the Eflot account.</div>
- <h3 style="margin-top:16px">How to use it</h3><ol class="sub" style="line-height:1.9;padding-left:18px">
- <li>Sign in to the <b>Claude desktop app</b> (Windows or Mac) with the Eflot account.</li>
- <li>Open <a href="${CRAWLER_URL}" target="_blank" rel="noopener">Eflot Site Crawler</a> and click <b>Install as app</b>.</li>
- <li>Open it from your Start menu or Applications, enter ${esc(p&&p.website?p.website:'your website')} and click <b>Start crawl</b>.</li>
- <li>Click <b>Allow</b> when it asks for full access. That lets it fetch pages with curl.</li>
- <li>When the crawl finishes, click <b>Send to SEO Studio</b>, then import the file below to see the full report here.</li></ol>
- <div class="row" style="margin-top:10px"><a class="btn p" href="${CRAWLER_URL}" target="_blank" rel="noopener">Open Eflot Site Crawler ↗</a><button class="btn o" id="sa_cp">Copy link</button></div>${crImportBox()}${(p&&p.crawls||[]).length?`<div style="margin-top:16px">${crHistHTML(p)}</div>`:''}</div>`;
- $('#sa_cp').onclick=()=>copy(CRAWLER_URL);crBindImport();
+ <div class="crbox"><b>The crawler is not available in the web version yet.</b> A web page cannot request other sites' pages directly, so crawling needs a desktop runner. If you already have a saved crawl file, you can open it below.</div>${crImportBox()}${(p&&p.crawls||[]).length?`<div style="margin-top:16px">${crHistHTML(p)}</div>`:''}</div>`;
+ crBindImport();
 }
 
 /* ---------------- coming soon ---------------- */
@@ -1825,7 +1810,7 @@ function fbDb(fs){
  return{doc,collection};
 }
 function fbUser(u){
- const me={id:u.uid,name:u.displayName||'',email:u.emailVerified?(u.email||'').toLowerCase():null,avatarUrl:u.photoURL||'',isOwner:false,canEdit:false};
+ const me={id:u.uid,name:u.displayName||'',email:u.emailVerified?(u.email||'').toLowerCase():null,rawEmail:(u.email||'').toLowerCase(),verified:!!u.emailVerified,avatarUrl:u.photoURL||'',isOwner:false,canEdit:false};
  return{id:async()=>u.uid,me:async()=>me,profiles:async()=>({}),isOwner:async()=>false,canEdit:async()=>false};
 }
 function fbSignInScreen(msg){
@@ -1908,47 +1893,56 @@ function gateBlocked(title,msg,email){gateShell('<div class="gicon bad">✕</div
 async function gate(user,db){
  gateChecking();
  if(!user||!db){gateBlocked('Could not sign in','Reload the page and try again.');return false}
- const me=await user.me();const uid=me.id,email=me.email;
- if(!email){fbBlocked('Your Google email is not verified','Sign in with your company Google account.');return false}
- S.email=email;S.declEmail=email;
+ const me=await user.me();const uid=me.id;
+ const ident=me.email||me.rawEmail||'';
+ const view=Object.assign({},me,{email:ident});
+ S.email=me.email;S.declEmail=ident;
  const isAdm=e=>!!(e&&ADMIN_EMAILS.includes(String(e).toLowerCase()));
- S.isAdmin=isAdm(email);
- if(!allowedEmail(email)&&!S.isAdmin){fbBlocked('This Google account cannot sign in','SEO Studio is open only to Eflot, Skillfloor, Rubixe and DataMites emails.',email);return false}
- const seen=lsGet('seobysaran_gate');const fast=()=>{if(seen===email){gateEnter();return true}return gateWelcome(me,email,false)};
- if(S.isAdmin)return fast();
- fbRecord(db,me,null);return fast();
+ S.isAdmin=isAdm(me.email);
+ const seen=lsGet('seobysaran_gate');
+ const enter=()=>{if(seen===(ident||uid)){gateEnter();return true}return gateWelcome(view,ident,false)};
+ if(S.isAdmin)return enter();
+ const st=await fbAccess(db,uid,me.verified?me.email:'');
+ if(st===undefined){gateBlocked('We could not check your access','Reload the page and try again. If it keeps happening, ask the admin to check the database rules.');return false}
+ if(st.ok){fbRecord(db,view,st.req,me);return enter()}
+ if(st.rejected)return fbRequestScreen(view,db,st.req,true);
+ if(st.req)return fbPending(view,db,st.req);
+ if(me.name){const r={uid,name:me.name,email:ident,company:brandOf(ident),ts:Date.now(),google:me.verified,typed:!me.verified};
+  try{await db.doc('requests/'+uid).set(r)}catch(e){gateBlocked('We could not send your access request','Reload the page and try again.');return false}
+  return fbPending(view,db,r)}
+ return fbRequestScreen(view,db,null,false);
 }
 async function fbAccess(db,uid,email){
- const [a,l,r]=await Promise.all([readDoc(db.doc('approvals/'+uid)),readDoc(db.doc('approvals/'+emKey(email))),readDoc(db.doc('requests/'+uid))]);
+ const [a,l,r]=await Promise.all([readDoc(db.doc('approvals/'+uid)),email?readDoc(db.doc('approvals/'+emKey(email))):Promise.resolve(null),readDoc(db.doc('requests/'+uid))]);
  if(a===undefined||l===undefined)return undefined;
  const req=r||null;
  if((a&&a.status==='approved')||(l&&l.status==='approved'))return{ok:true,req};
  const rej=(a&&a.status==='rejected'&&(!req||a.ts>req.ts))||(l&&l.status==='removed'&&!req);
  return{ok:false,rejected:!!rej,req};
 }
-function fbRecord(db,me,req){if(req&&req.email===me.email&&req.name)return;db.doc('requests/'+me.id).set({uid:me.id,name:me.name||'',email:me.email,company:brandOf(me.email),ts:(req&&req.ts)||Date.now(),google:true}).catch(()=>{})}
+function fbRecord(db,me,req,raw){if(req&&req.email===me.email&&req.name)return;db.doc('requests/'+me.id).set({uid:me.id,name:me.name||'',email:me.email||'',company:brandOf(me.email),ts:(req&&req.ts)||Date.now(),google:!!(raw&&raw.verified),typed:!!(raw&&!raw.verified)}).catch(()=>{})}
 function fbBlocked(t,m,email){gateBlocked(t,m,email);const g=$('#gate .gcard');if(g)g.insertAdjacentHTML('beforeend','<p class="gnote"><a href="#" id="fb_out">Use a different Google account</a></p>');const o=$('#fb_out');if(o)o.onclick=e=>{e.preventDefault();fbSignOut()}}
 function fbUserBox(me){return '<div class="guser"><img alt="" src="'+esc(me.avatarUrl||ICON)+'"><div><b>'+esc(me.name||'Team member')+'</b><span>'+esc(me.email)+'</span></div></div>'}
 function fbRequestScreen(me,db,old,rejected){
  return new Promise(res=>{
-  gateShell((rejected?'<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">An admin did not approve your last request. You can ask again.</p>':'<h2>Request access</h2><p class="sub">You are signed in. Send a request and Vamsi or Saran will approve it.</p>')+fbUserBox(me)+
+  gateShell((rejected?'<div class="gicon bad">✕</div><h2>Access not approved</h2><p class="sub">An admin did not approve your last request. You can ask again.</p>':'<h2>Request access</h2><p class="sub">You are signed in. Send a request and the admin will approve it.</p>')+fbUserBox(me)+
    '<div class="fld" style="text-align:left;margin-top:10px"><label>Your name</label><input type="text" id="r_nm"></div>'+
    '<button class="btn p gbtn" id="r_go">'+(rejected?'Request access again':'Send access request')+'</button><div class="hint" id="r_err" style="color:var(--bad)"></div><p class="gnote"><a href="#" id="fb_out">Use a different Google account</a></p>');
   $('#r_nm').value=me.name||'';$('#fb_out').onclick=e=>{e.preventDefault();fbSignOut()};
   $('#r_go').onclick=async()=>{const nm=$('#r_nm').value.trim();if(!nm){$('#r_err').textContent='Add your name.';return}
    const b=$('#r_go');b.disabled=true;b.innerHTML='<span class="spin"></span> Sending';
-   const r={uid:me.id,name:nm,email:me.email,company:brandOf(me.email),ts:Date.now(),google:true,again:!!rejected};
+   const r={uid:me.id,name:nm,email:me.email,company:brandOf(me.email),ts:Date.now(),google:!!me.verified,typed:!me.verified,again:!!rejected};
    try{await db.doc('requests/'+me.id).set(r)}catch(e){b.disabled=false;b.textContent='Send access request';$('#r_err').textContent='Could not send. Try again.';return}
    me.name=nm;res(fbPending(me,db,r))};
  });
 }
 function fbPending(me,db,req){
  return new Promise(res=>{
-  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Your request is with Vamsi and Saran in the Admin dashboard. This page opens by itself once they approve you. After that you sign in with Google any time.</p>'+fbUserBox(me)+
+  gateShell('<div class="gicon wait">⏳</div><h2>Waiting for approval</h2><p class="sub">Your request has been sent to the admin. This page opens by itself once you are approved. After that you can sign in any time.</p>'+fbUserBox(me)+
    '<p class="gnote" id="g_when"></p><button class="btn gbtn" id="g_chk">Check again</button><p class="gnote"><a href="#" id="fb_out">Use a different Google account</a></p>');
   $('#g_when').textContent='Requested on '+new Date(req.ts).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
   $('#fb_out').onclick=e=>{e.preventDefault();fbSignOut()};
-  let done=false;const check=async()=>{if(done)return true;const st=await fbAccess(db,me.id,me.email);if(!st)return false;
+  let done=false;const check=async()=>{if(done)return true;const st=await fbAccess(db,me.id,me.verified?me.email:'');if(!st)return false;
    if(st.ok){done=true;clearInterval(iv);res(gateWelcome(me,me.email,false,true))}
    else if(st.rejected){done=true;clearInterval(iv);res(fbRequestScreen(me,db,st.req,true))}return done};
   const iv=setInterval(check,15000);
@@ -1969,7 +1963,7 @@ taDraw=async function(){await __taDraw();const c=$('#ta_card');if(!c||$('#ak_car
   b.disabled=false;b.textContent='Save and test';$('#ak_in').value='';$('#ak_st').textContent='✓ Team key saved and working.';toast('Team AI key saved')};
 };
 function aiErr(e){
- if(e&&e.code==='no_key')return S.isAdmin?'Add the team AI key in Admin dashboard → Team AI key.':'AI is not set up yet. Ask Vamsi or Saran to add the team AI key.';
+ if(e&&e.code==='no_key')return S.isAdmin?'Add the team AI key in Admin dashboard → Team AI key.':'AI is not set up yet. Ask the admin to add the team AI key.';
  if(e&&e.code==='cancelled')return 'Stopped.';
  if(e&&e.code==='busy')return 'Google AI is very busy right now. Wait a minute and try again.';
  if(e&&e.code==='rate_limited')return 'The free AI limit is used up for now. Wait a minute, or try again tomorrow.';
@@ -1986,7 +1980,7 @@ fbBoot().then(()=>init()).then(()=>fbLoadKey()).catch(e=>{const l=$('#loading');
    Runs only in the installed desktop app: pages are fetched with curl on the
    person's computer (built into Windows 10+, macOS and Linux). */
 const CR={st:null,tab:'issues',filter:'',q:'',sel:null};
-const CR_UA='Mozilla/5.0 (compatible; EflotSEOStudio/1.0; +https://eflot.com)';
+const CR_UA='Mozilla/5.0 (compatible; SEObySaranStudio/1.0; +https://seobysaran.com)';
 const CR_SKIP=/\.(jpe?g|png|gif|webp|svg|ico|bmp|avif|tiff?|pdf|docx?|xlsx?|pptx?|zip|rar|7z|gz|mp4|mp3|webm|mov|avi|wav|css|js|json|xml|txt|woff2?|ttf|eot|exe|dmg|apk)(\?|$)/i;
 const CR_IMG=/\.(jpe?g|png|gif|webp|svg|ico|bmp|avif)(\?|$)/i;
 
@@ -2100,7 +2094,7 @@ function crEnqueue(u,depth,from,anchor){
 async function crFetchPage(it){
  const st=CR.st;const u=it.url;
  const rec={url:u,depth:it.depth===99?null:it.depth,from:it.from,code:0,status:'',ms:0,ttfb:0,size:0,ctype:'',blocked:false,indexable:false,reason:''};
- if(st.robots&&st.cfg.mode==='spider'){const pth=new URL(u).pathname+new URL(u).search;const c=robotsCheck(st.robots,'eflotseostudio',pth);
+ if(st.robots&&st.cfg.mode==='spider'){const pth=new URL(u).pathname+new URL(u).search;const c=robotsCheck(st.robots,'seobysaranstudio',pth);
   const g=robotsCheck(st.robots,'googlebot',pth);if(!g.allowed){rec.blocked=true;rec.reason='Blocked by robots.txt';rec.status='Blocked by robots.txt';
    if(st.cfg.robots){st.pages.set(u,rec);return}}}
  const r=await crCurl(u,true);
@@ -2262,26 +2256,26 @@ function crAnalyse(){
 
 /* ---------- hand-over between the crawler app and SEO Studio ---------- */
 function crExport(){const st=CR.st;
- return JSON.stringify({kind:'eflot-crawl',v:1,cfg:st.cfg,host:st.host,origin:st.origin,t0:st.t0,t1:st.t1,httpHome:st.httpHome?{code:st.httpHome.code,location:st.httpHome.location||''}:null,
+ return JSON.stringify({kind:'seobysaran-crawl',v:1,cfg:st.cfg,host:st.host,origin:st.origin,t0:st.t0,t1:st.t1,httpHome:st.httpHome?{code:st.httpHome.code,location:st.httpHome.location||''}:null,
   sitemap:[...st.sitemap],sitemapFiles:st.sitemapFiles,pages:[...st.pages.values()],ext:[...st.ext.values()],imgs:[...st.imgs.values()],inlinks:[...st.inlinks.entries()]})}
 async function crPack(txt){
  if(typeof CompressionStream==='undefined')return txt;
  const buf=new Uint8Array(await new Response(new Blob([txt]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
  let b='';for(let i=0;i<buf.length;i+=0x8000)b+=String.fromCharCode.apply(null,buf.subarray(i,i+0x8000));
- return 'EFLGZ1:'+btoa(b)}
+ return 'SBSGZ1:'+btoa(b)}
 async function crUnpack(file){
  const head=await file.slice(0,7).text();
- if(head!=='EFLGZ1:')return file.text();
+ if(head!=='SBSGZ1:')return file.text();
  const bin=atob((await file.text()).slice(7));const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
  return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text()}
 function crImport(txt){
  let o;try{o=JSON.parse(txt)}catch(e){toast('That file is not a crawl file');return false}
- if(!o||o.kind!=='eflot-crawl'){toast('That file is not an Eflot crawl file');return false}
+ if(!o||o.kind!=='seobysaran-crawl'){toast('That file is not a SEO by Saran crawl file');return false}
  CR.st={cfg:o.cfg,host:o.host,origin:o.origin,t0:o.t0,t1:o.t1,httpHome:o.httpHome,sitemap:new Set(o.sitemap||[]),sitemapFiles:o.sitemapFiles||[],
   pages:new Map((o.pages||[]).map(p=>[p.url,p])),ext:new Map((o.ext||[]).map(e=>[e.url,e])),imgs:new Map((o.imgs||[]).map(i=>[i.url,i])),inlinks:new Map(o.inlinks||[]),
   queue:[],seen:new Set(),procs:new Set(),run:false,done:true,imported:true,log:'Imported crawl from '+new Date(o.t1||o.t0).toLocaleString()};
  CR.tab='issues';CR.filter='';CR.q='';CR.sel=null;CR.selUrl=null;crAnalyse();return true}
-function crImportBox(){return `<div class="crbox"><b>Import a crawl from Eflot Site Crawler</b><p class="sub" style="margin:4px 0 8px">In the crawler app, click <b>Send to SEO Studio</b>. It saves a file named crawl_..._seo-studio.eflot in Downloads. Pick that file here.</p><input type="file" id="sa_imp" accept=".json,.eflot,application/json"><div id="sa_impst" class="sub" style="margin-top:6px"></div></div>`}
+function crImportBox(){return `<div class="crbox"><b>Open a saved crawl</b><p class="sub" style="margin:4px 0 8px">Pick a crawl file you saved earlier.</p><input type="file" id="sa_imp" accept=".json,.seobysaran,application/json"><div id="sa_impst" class="sub" style="margin-top:6px"></div></div>`}
 function crBindImport(){const f=$('#sa_imp');if(!f)return;f.onchange=async()=>{const file=f.files[0];if(!file)return;
  if(file.size>600e6){toast('File is too large. Crawl fewer pages and send again.');return}
  const stl=$('#sa_impst');if(stl)stl.textContent='Opening '+Math.round(file.size/1048576)+' MB file. Large crawls take a few seconds…';
@@ -2398,7 +2392,7 @@ function crBind(){
  b('sa_pause',()=>{st.paused=!st.paused;crDraw()});
  b('sa_stop',()=>{st.run=false;st.procs.forEach(p=>p.kill().catch(()=>{}));st.log='Stopped';});
  b('sa_new',()=>{CR.st=null;route()});
- b('sa_send',async()=>{toast('Packing the crawl file…');const z=await crPack(crExport());save('crawl_'+(st.host||'site').replace(/\W+/g,'-')+'_'+today()+'_seo-studio'+(z.startsWith('EFLGZ1:')?'.eflot':'.json'),z)});
+ b('sa_send',async()=>{toast('Packing the crawl file…');const z=await crPack(crExport());save('crawl_'+(st.host||'site').replace(/\W+/g,'-')+'_'+today()+'_seo-studio'+(z.startsWith('SBSGZ1:')?'.seobysaran':'.json'),z)});
  $$('[data-crt]',m).forEach(x=>x.onclick=()=>{CR.tab=x.dataset.crt;CR.filter='';CR.q='';CR.sel=null;CR.selUrl=null;crDraw()});
  $$('[data-cri]',m).forEach(x=>x.onclick=()=>{CR.sel=CR.sel===x.dataset.cri?null:x.dataset.cri;crDraw();const bx=$('#sa_box');if(bx)bx.scrollIntoView({behavior:'smooth',block:'start'})});
  $$('[data-cru]',m).forEach(x=>x.onclick=()=>{CR.selUrl=x.dataset.cru;crDraw();const bx=$('#sa_box');if(bx)bx.scrollIntoView({behavior:'smooth',block:'start'})});
@@ -2644,7 +2638,7 @@ function vHome(m){
  const paths=HM_NODES.map(([v,l,ic,x,y],i)=>{const dx=C[0]-x;const d=`M${x} ${y} C ${x+dx*0.55} ${y}, ${C[0]-dx*0.45} ${C[1]}, ${C[0]-(dx>0?62:-62)} ${C[1]}`;return {d,i,x,y,dx}});
  m.innerHTML=`<div class="hm">
  <div class="hm-top">
-  <span class="hm-pill"><span class="hm-dots"><i></i><i></i><i></i></span>SEO, AEO and GEO tools for every Eflot brand</span>
+  <span class="hm-pill"><span class="hm-dots"><i></i><i></i><i></i></span>SEO, AEO and GEO tools by Saran</span>
   ${first?`<div class="hm-hi">Hi ${esc(first)}, welcome back</div>`:''}<h1>Grow search and AI visibility<br>from one studio</h1>
   <p>Check how ChatGPT and Google AI talk about your brand, crawl your site, test page speed and plan content. Pick a tool below to start.</p>
   <div class="hm-cta"><a class="btn p hm-go" href="#checker">Run AI visibility check <span>→</span></a><a class="btn o" href="#siteaudit">Audit a site</a></div>
