@@ -265,10 +265,62 @@ mark.ban{background:#FECACA}
  .qedit{grid-template-columns:1fr 34px}.qedit select{grid-column:1}
  .opts{grid-template-columns:1fr 1fr}
 }
-#gate{position:fixed;inset:0;z-index:60;overflow-y:auto;background:linear-gradient(160deg,#F5F2FD,#fff 55%)}
-.gwrap{max-width:440px;margin:0 auto;padding:56px 20px;text-align:center}
-.glogo{height:46px;mix-blend-mode:multiply;margin-bottom:22px}
-.gcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px 26px;box-shadow:0 10px 40px rgba(78,47,187,.08)}
+#gate{position:fixed;inset:0;z-index:60;overflow-y:auto;background:#fff}
+.gsplit{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:12px}
+.gleft{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:28px 20px 8px;min-height:calc(100vh - 24px)}
+.gcenter{width:100%;max-width:360px;margin:auto 0;text-align:center}
+.glogo{height:44px;mix-blend-mode:multiply;margin-bottom:26px}
+.gcard{padding:0}
+.gcard h2{font-weight:700}
+.gright{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;padding:40px 28px;overflow:hidden}
+.gslide{text-align:center;max-width:360px;min-height:92px}
+.gslide h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.gslide p{color:var(--mut);font-size:13.5px;margin:0}
+.gnet{position:relative;width:min(400px,100%);aspect-ratio:1}
+.gnet svg.gl{position:absolute;inset:0;width:100%;height:100%}
+.gnode{position:absolute;width:20%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--mut)}
+.gnode i{width:100%;aspect-ratio:1;background:#fff;border:1px solid var(--line);border-radius:14px;display:grid;place-items:center;color:var(--ink);box-shadow:0 2px 8px rgba(31,29,38,.06)}
+.gnode i svg{width:46%;height:46%}
+.gnode.hub{width:24%}
+.gnode.hub i{background:#fff;border:2px solid var(--p);border-radius:18px;box-shadow:0 6px 18px rgba(94,66,192,.18)}
+.gnode.hub i img{width:64%;height:64%;object-fit:contain;mix-blend-mode:multiply}
+.gdots{display:flex;gap:7px}
+.gdots button{width:6px;height:6px;border-radius:50%;border:0;padding:0;background:#CFCBDD;cursor:pointer}
+.gdots button.on{background:var(--ink)}
+.gdots button:focus-visible{outline:2px solid var(--p);outline-offset:3px}
+.gbtn2{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:42px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.gbtn2.out{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,29,38,.05)}
+.gbtn2.out:hover{border-color:#CFCBDD;background:var(--pll)}
+.gbtn2.dark{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+.gbtn2.dark:hover{background:#000}
+.gbtn2:disabled{opacity:.6;cursor:default}
+.gbtn2:focus-visible,#gate a:focus-visible,#gate input:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.gG{width:22px;height:22px;border-radius:6px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+.gor{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:11px;margin:16px 0}
+.gor:before,.gor:after{content:"";flex:1;height:1px;background:var(--line)}
+#gate .fld{text-align:left;margin-bottom:12px}
+#gate .fld label{font-size:12.5px;margin-bottom:5px}
+#gate .fld input{width:100%;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13.5px;font-family:inherit;color:var(--ink)}
+#gate .fld input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(94,66,192,.12);outline:none}
+#gate .fld.bad input{border-color:var(--bad);background:var(--badl)}
+.gpw{position:relative}
+.gpw input{padding-right:40px!important}
+.gpw button{position:absolute;right:4px;top:4px;width:32px;height:32px;border:0;background:none;color:var(--mut);cursor:pointer;border-radius:8px;display:grid;place-items:center}
+.gpw button:hover{color:var(--ink)}
+.gpw button:focus-visible{outline:2px solid var(--p)}
+.gerr{display:none;align-items:center;gap:7px;text-align:left;font-size:12.5px;color:var(--bad);margin:-2px 0 10px}
+.gerr.gon{display:flex}
+.gerr:before{content:"!";flex:none;width:15px;height:15px;border-radius:50%;background:var(--bad);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+.gerr.ok{color:var(--ok)}
+.gerr.ok:before{content:"\2713";background:var(--ok)}
+.grow{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin:2px 0 16px}
+.grow label{display:flex;align-items:center;gap:7px;color:var(--mut);cursor:pointer}
+.grow input{accent-color:var(--ink);width:15px;height:15px;margin:0}
+#gate a{color:var(--ink);font-weight:600;text-decoration:none}
+#gate a:hover{text-decoration:underline}
+.gtrouble{margin-top:22px;font-size:12.5px}
+body:has(#gate:not(.hidden)) #fb_signout{display:none}
+@media (max-width:900px){.gsplit{grid-template-columns:1fr;padding:0}.gright{display:none}.gleft{min-height:100vh;padding:24px 20px 12px}}
 .gcard h2{font-size:21px;margin-bottom:6px}
 .gcard .sub{color:var(--mut);font-size:14px;margin-bottom:16px}
 .gbrands{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0 18px}
@@ -585,9 +637,40 @@ function delta(curv,prev,isPct,lowerBetter){
 const BRANDS=['eflot','skillfloor','rubixe','datamites'];
 const BRAND_LABELS=['SEO by Saran'];
 function allowedEmail(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(e||'').trim())}
+const GATE_SLIDES=[
+ ['See how AI search talks about your brand','Check ChatGPT, Gemini, Perplexity and Google answers for the questions your customers ask.'],
+ ['Keep every audit in one project','Save each run, compare results over time and see what changed.'],
+ ['Built for your SEO team','Sign in with your work email to start auditing.']];
+const GI={
+ search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+ spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+ compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+ burst:'<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>',
+ code:'<path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/>',
+ list:'<path d="M9 7h11M9 12h11M9 17h11M4.5 7h.01M4.5 12h.01M4.5 17h.01"/>',
+ chart:'<path d="M5 20V11M12 20V5M19 20v-7"/>'};
+function gatePanel(){
+ const N=[[12.5,12.5,'search','Google'],[50,12.5,'chat','ChatGPT'],[87.5,12.5,'spark','Gemini'],[12.5,50,'compass','Perplexity'],[87.5,50,'burst','Claude'],[12.5,87.5,'code','Copilot'],[50,87.5,'list','Audits'],[87.5,87.5,'chart','Reports']];
+ const ln=[[12.5,12.5,87.5,12.5],[87.5,12.5,87.5,87.5],[87.5,87.5,12.5,87.5],[12.5,87.5,12.5,12.5]].concat(N.map(n=>[50,50,n[0],n[1]]));
+ return '<aside class="gright" aria-label="About SEO by Saran Studio"><div class="gslide" id="gs_txt" aria-live="polite"></div><div class="gnet"><svg class="gl" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+
+  ln.map(l=>'<line x1="'+l[0]+'" y1="'+l[1]+'" x2="'+l[2]+'" y2="'+l[3]+'" stroke="#CFCBDD" stroke-width=".4" stroke-dasharray="1.2 1.2" vector-effect="non-scaling-stroke"/>').join('')+'</svg>'+
+  N.map(n=>'<div class="gnode" style="left:'+n[0]+'%;top:'+n[1]+'%"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+GI[n[2]]+'</svg></i>'+n[3]+'</div>').join('')+
+  '<div class="gnode hub" style="left:50%;top:50%"><i><img src="'+ICON+'" alt=""></i></div></div><div class="gdots" id="gs_dots"></div></aside>';
+}
+let gateTimer=null;
+function gatePanelInit(){
+ const t=$('#gs_txt'),d=$('#gs_dots');if(!t||!d)return;
+ clearInterval(gateTimer);let i=0;
+ const show=k=>{i=k;t.innerHTML='<h3>'+GATE_SLIDES[k][0]+'</h3><p>'+GATE_SLIDES[k][1]+'</p>';
+  d.innerHTML=GATE_SLIDES.map((x,j)=>'<button type="button" aria-label="Show message '+(j+1)+'" class="'+(j===k?'on':'')+'" data-i="'+j+'"></button>').join('');
+  d.querySelectorAll('button').forEach(b=>b.onclick=()=>{clearInterval(gateTimer);show(+b.dataset.i)})};
+ show(0);
+ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gateTimer=setInterval(()=>{if(!$('#gs_txt')){clearInterval(gateTimer);return}show((i+1)%GATE_SLIDES.length)},6000);
+}
 function gateShell(inner){
-  const g=$('#gate');g.innerHTML='<div class="gwrap"><img class="glogo" src="'+LOGO+'" alt="SEO by Saran"><div class="gcard">'+inner+'</div><p class="gfoot">Built by @seobysaran</p></div>';
-  g.classList.remove('hidden');const l=$('#loading');if(l)l.style.display='none';
+  const g=$('#gate');g.innerHTML='<div class="gsplit"><div class="gleft"><div class="gcenter"><img class="glogo" src="'+LOGO+'" alt="SEO by Saran"><div class="gcard">'+inner+'</div></div><p class="gfoot">Built by @seobysaran</p></div>'+gatePanel()+'</div>';
+  g.classList.remove('hidden');const l=$('#loading');if(l)l.style.display='none';gatePanelInit();
 }
 const BRAND_CHIPS='<div class="gbrands">'+BRAND_LABELS.map(b=>'<span>'+b+'</span>').join('')+'</div>';
 function gateChecking(){gateShell('<h2>Sign in to SEO Studio</h2><p class="sub">Use your company email</p>'+BRAND_CHIPS+'<div class="gcheck"><span class="spin dk"></span><span>Checking your account</span></div>')}
@@ -1749,17 +1832,23 @@ function fbSignInScreen(msg){
  return new Promise(res=>{
   let mode='in';
   const draw=()=>{
-   gateShell('<h2>'+(mode==='in'?'Sign in to SEO by Saran Studio':'Create your account')+'</h2><p class="sub">'+(mode==='in'?'Welcome back':'Free SEO and AI search tools')+'</p>'+
-   '<button class="btn p gbtn" id="fb_go" style="display:flex;align-items:center;justify-content:center;gap:10px"><span style="background:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;color:#4285F4;font-weight:700">G</span>Continue with Google</button>'+
-   '<p class="gnote">or use email</p>'+
-   (mode==='up'?'<div class="fld" style="text-align:left"><label>Your name</label><input type="text" id="em_nm" autocomplete="name"></div>':'')+
-   '<div class="fld" style="text-align:left"><label>Email</label><input type="email" id="em_e" autocomplete="email"></div>'+
-   '<div class="fld" style="text-align:left"><label>Password</label><input type="password" id="em_p" autocomplete="'+(mode==='in'?'current-password':'new-password')+'" placeholder="At least 6 characters"></div>'+
-   '<button class="btn gbtn" id="em_go">'+(mode==='in'?'Sign in':'Create account')+'</button>'+
-   '<div class="hint" id="fb_err" style="color:var(--bad);margin-top:8px"></div>'+
-   '<p class="gnote">'+(mode==='in'?'New here? <a href="#" id="em_sw">Create an account</a> · <a href="#" id="em_fp">Forgot password?</a>':'Already have an account? <a href="#" id="em_sw">Sign in</a>')+'</p>');
-   if(msg)$('#fb_err').textContent=msg;
-   const err=t=>{$('#fb_err').textContent=t};
+   const eye='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+   const hlp='mailto:'+ADMIN_EMAILS[0]+'?subject='+encodeURIComponent('SEO Studio sign-in help');
+   gateShell('<h2 style="font-size:21px;margin-bottom:6px">'+(mode==='in'?'Sign in to SEO by Saran Studio':'Create your account')+'</h2><p class="sub" style="margin-bottom:22px">'+(mode==='in'?'Welcome back. Sign in with Google or your email.':'Free SEO and AI search tools')+'</p>'+
+   '<button type="button" class="gbtn2 out" id="fb_go"><span class="gG">G</span>Sign in with Google</button>'+
+   '<div class="gor">OR</div>'+
+   (mode==='up'?'<div class="fld"><label for="em_nm">Your name</label><input type="text" id="em_nm" autocomplete="name"></div>':'')+
+   '<div class="fld" id="f_e"><label for="em_e">Email</label><input type="email" id="em_e" autocomplete="email" placeholder="you@company.com"></div>'+
+   '<div class="fld" id="f_p"><label for="em_p">Password</label><div class="gpw"><input type="password" id="em_p" autocomplete="'+(mode==='in'?'current-password':'new-password')+'" placeholder="At least 6 characters"><button type="button" id="em_eye" aria-label="Show password">'+eye+'</button></div></div>'+
+   '<div class="gerr" id="fb_err" role="alert"></div>'+
+   '<div class="grow"><label><input type="checkbox" id="em_rm" checked>Remember me</label>'+(mode==='in'?'<a href="#" id="em_fp">Forgot password?</a>':'<span></span>')+'</div>'+
+   '<button type="button" class="gbtn2 dark" id="em_go">'+(mode==='in'?'Continue':'Create account')+'</button>'+
+   '<p class="gnote" style="margin-top:16px">'+(mode==='in'?'New here? <a href="#" id="em_sw">Create an account</a>':'Already have an account? <a href="#" id="em_sw">Sign in</a>')+'</p>'+
+   '<p class="gtrouble"><a href="'+hlp+'">Have trouble signing in?</a></p>');
+   $('#em_eye').onclick=()=>{const i=$('#em_p');const show=i.type==='password';i.type=show?'text':'password';$('#em_eye').setAttribute('aria-label',show?'Hide password':'Show password')};
+   const err=(t,ok)=>{const e=$('#fb_err');e.textContent=t;e.className='gerr'+(t?' gon':'')+(ok?' ok':'');
+    const pe=$('#f_p'),ee=$('#f_e');if(pe)pe.classList.toggle('bad',!!t&&!ok);if(ee)ee.classList.toggle('bad',!!t&&!ok&&/email/i.test(t))};
+   if(msg)err(msg);
    const nice=e=>{const c=(e&&e.code)||'';
     if(/user-not-found|wrong-password|invalid-credential|invalid-login/.test(c))return 'Email or password is not right.';
     if(/email-already-in-use/.test(c))return 'This email already has an account. Sign in instead.';
@@ -1767,11 +1856,13 @@ function fbSignInScreen(msg){
     if(/invalid-email/.test(c))return 'That email does not look right.';
     if(/too-many-requests/.test(c))return 'Too many tries. Wait a few minutes.';
     return 'Could not continue: '+((e&&e.message)||e)};
+   ['#em_e','#em_p','#em_nm'].forEach(q=>{const el=$(q);if(el)el.onkeydown=e=>{if(e.key==='Enter')$('#em_go').click()}});
    $('#em_sw').onclick=e=>{e.preventDefault();mode=mode==='in'?'up':'in';draw()};
    const fp=$('#em_fp');if(fp)fp.onclick=async e=>{e.preventDefault();const v=$('#em_e').value.trim();if(!v){err('Type your email first, then click Forgot password.');return}
-    try{await FB.auth.sendPasswordResetEmail(v);err('');$('#fb_err').style.color='var(--ok)';$('#fb_err').textContent='Password reset email sent. Check your inbox.'}catch(x){err(nice(x))}};
+    try{await FB.auth.sendPasswordResetEmail(v);err('Password reset email sent. Check your inbox.',true)}catch(x){err(nice(x))}};
    $('#em_go').onclick=async()=>{const em=$('#em_e').value.trim(),pw=$('#em_p').value;if(!em||!pw){err('Add your email and password.');return}
     const b=$('#em_go');b.disabled=true;
+    try{await FB.auth.setPersistence($('#em_rm').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION)}catch(x){}
     try{let r;
      if(mode==='up'){const nm=($('#em_nm').value||'').trim();if(!nm){b.disabled=false;err('Add your name.');return}
       r=await FB.auth.createUserWithEmailAndPassword(em,pw);try{await r.user.updateProfile({displayName:nm})}catch(x){}}
@@ -1780,6 +1871,7 @@ function fbSignInScreen(msg){
     catch(x){b.disabled=false;err(nice(x))}};
    $('#fb_go').onclick=async()=>{const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
     const b=$('#fb_go');b.disabled=true;
+    try{await FB.auth.setPersistence($('#em_rm').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION)}catch(x){}
     try{const r=await FB.auth.signInWithPopup(p);res(r.user)}
     catch(e){b.disabled=false;if(e&&/popup-blocked|operation-not-supported/.test(e.code||'')){try{await FB.auth.signInWithRedirect(p)}catch(x){}}else if(!/popup-closed|cancelled-popup/.test((e&&e.code)||''))err('Sign-in did not work: '+((e&&e.message)||e))}};
   };
