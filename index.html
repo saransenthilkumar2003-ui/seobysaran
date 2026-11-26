@@ -1847,7 +1847,7 @@ function fbSignInScreen(msg){
    '<p class="gtrouble"><a href="'+hlp+'">Have trouble signing in?</a></p>');
    $('#em_eye').onclick=()=>{const i=$('#em_p');const show=i.type==='password';i.type=show?'text':'password';$('#em_eye').setAttribute('aria-label',show?'Hide password':'Show password')};
    const err=(t,ok)=>{const e=$('#fb_err');e.textContent=t;e.className='gerr'+(t?' gon':'')+(ok?' ok':'');
-    const pe=$('#f_p'),ee=$('#f_e');if(pe)pe.classList.toggle('bad',!!t&&!ok);if(ee)ee.classList.toggle('bad',!!t&&!ok&&/email/i.test(t))};
+    const cred=!!t&&!ok&&/email|password|characters|name/i.test(t);const pe=$('#f_p'),ee=$('#f_e');if(pe)pe.classList.toggle('bad',cred&&/password|characters|not right/i.test(t));if(ee)ee.classList.toggle('bad',cred&&/email|not right/i.test(t))};
    if(msg)err(msg);
    const nice=e=>{const c=(e&&e.code)||'';
     if(/user-not-found|wrong-password|invalid-credential|invalid-login/.test(c))return 'Email or password is not right.';
@@ -1873,7 +1873,8 @@ function fbSignInScreen(msg){
     const b=$('#fb_go');b.disabled=true;
     try{await FB.auth.setPersistence($('#em_rm').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION)}catch(x){}
     try{const r=await FB.auth.signInWithPopup(p);res(r.user)}
-    catch(e){b.disabled=false;if(e&&/popup-blocked|operation-not-supported/.test(e.code||'')){try{await FB.auth.signInWithRedirect(p)}catch(x){}}else if(!/popup-closed|cancelled-popup/.test((e&&e.code)||''))err('Sign-in did not work: '+((e&&e.message)||e))}};
+    catch(e){b.disabled=false;if(e&&/popup-blocked|operation-not-supported/.test(e.code||'')){try{await FB.auth.signInWithRedirect(p)}catch(x){}}else if(e&&e.code==='auth/unauthorized-domain'){const h=location.hostname;err(h?'This site ('+h+') is not allowed to use Google sign-in yet. Owner: open Firebase console, Authentication, Settings, Authorized domains, add "'+h+'", then reload.':'Google sign-in does not work from a local file. Open the hosted link (for example your GitHub Pages address) instead.')}
+    else if(!/popup-closed|cancelled-popup/.test((e&&e.code)||''))err('Sign-in did not work: '+((e&&e.message)||e))}};
   };
   draw();
  });
